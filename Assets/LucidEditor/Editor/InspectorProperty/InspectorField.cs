@@ -228,21 +228,21 @@ namespace AnnulusGames.LucidTools.Editor
         private void DrawArrayField(SerializedProperty property, bool reordable)
         {
             // TODO: support reordable list
-            if (reordable)
-            {
-                if (_isInGroup)
-                {
-                    using (new EditorGUI.IndentLevelScope())
-                    {
-                        DrawNormalField(property, new GUIContent(displayName));
-                    }
-                }
-                else
-                {
-                    DrawNormalField(property, new GUIContent(displayName));
-                }
-                return;
-            }
+            //if (reordable)
+            //{
+            //    if (_isInGroup)
+            //    {
+            //        using (new EditorGUI.IndentLevelScope())
+            //        {
+            //            DrawNormalField(property, new GUIContent(displayName));
+            //        }
+            //    }
+            //    else
+            //    {
+            //        DrawNormalField(property, new GUIContent(displayName));
+            //    }
+            //    return;
+            //}
 
             var reorderableList = GetArrayReordableList(property);
             Rect position = EditorGUILayout.GetControlRect();
@@ -294,10 +294,16 @@ namespace AnnulusGames.LucidTools.Editor
                     }
                     else
                     {
-                        foreach (var child in _childProperties.OrderBy(x => x.order))
+                        if (reordable)
                         {
-                            child.Draw();
+                            var list = GetArrayReordableList(property);
+                            list.DoLayoutList();
                         }
+                        else
+                            foreach (var child in _childProperties.OrderBy(x => x.order))
+                            {
+                                child.Draw();
+                            }
                     }
                 }
 
@@ -313,9 +319,9 @@ namespace AnnulusGames.LucidTools.Editor
                 reorderableList.headerHeight = 0;
                 reorderableList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
-                    GUILayout.BeginArea(rect);
+                    //GUILayout.BeginArea(rect);
                     _childProperties[index].Draw();
-                    GUILayout.EndArea();
+                    //GUILayout.EndArea();
                 };
                 reorderableList.onAddCallback = list =>
                 {
